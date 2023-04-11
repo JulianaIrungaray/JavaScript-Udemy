@@ -76,16 +76,22 @@ console.log(nuevoEnlace);
 // }
 
 //Seleccionar elementos y asociarles un evento
-const btnEnviar = document.querySelector('.boton--primario');
-btnEnviar.addEventListener('click', function(e) {
-    console.log(e);
+// const btnEnviar = document.querySelector('.boton--primario');
+// btnEnviar.addEventListener('click', function(e) {
+//     console.log(e);
 
-    //cancela el evento, lo que significa que cualquier acción por 
-    //defecto que deba producirse como resultado de este evento, no ocurrirá.
-    e.preventDefault();
+//     //cancela el evento, lo que significa que cualquier acción por 
+//     //defecto que deba producirse como resultado de este evento, no ocurrirá.
+//     e.preventDefault();
 
-    console.log("Enviando formulario");
-})
+//     console.log("Enviando formulario");
+// });
+
+// preventDefault: Cancela el evento si este es cancelable, 
+// sin detener el resto del funcionamiento del evento, es decir, 
+// puede ser llamado de nuevo.
+
+
 
 //Eventos de los Inputs y Textarea
 const datos = { //OBJETO
@@ -102,13 +108,51 @@ const mensaje = document.querySelector('#mensaje');
 nombre.addEventListener('input', leerTexto);
 email.addEventListener('input', leerTexto);
 mensaje.addEventListener('input', leerTexto);
+const formulario = document.querySelector('.formulario');
+
+//El evento de Submit
+formulario.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    //Validar formulario
+    const { nombre, email, mensaje } = datos;
+    
+    if (nombre === '' || email === '' || mensaje === '') {
+        mostrarAlerta('Todos los campos son obligatorios' , true);
+
+        return; //Corta la ejecución del código
+    }
+
+    //Crear alerta de crear correctamente
+    mostrarAlerta('Mensaje enviado correctamente');
+
+});
 
 function leerTexto(e) {
     // console.log(e.target.value);
 
     datos[e.target.id] = e.target.value;
 
-    console.log(e.target);
-
-    console.log(datos);
+    // console.log(datos);
 }
+
+function mostrarAlerta(mensaje, error = null) {
+    alerta.textContent = mensaje;
+    
+    if (error) {
+        alerta.classList.add('error');
+    }else {
+        alerta.classList.add('correcto');
+    }
+
+    formulario.appendChild(alerta);
+
+    //El mensaje desaparece después de 5 segundos
+    setTimeout(() => {
+        alerta.remove();
+    }, 5000);
+}
+
+
+
+
